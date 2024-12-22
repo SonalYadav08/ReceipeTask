@@ -17,12 +17,12 @@ const StackNavigator = ({navigation}: any) => {
   const checkAuth = async () => {
     try {
       let accessToken: any = await AsyncStorage.getItem('access_token');
-      console.log('accessToken', accessToken);
+
       if (!accessToken) {
         navigation.replace('Login');
       }
       let response = await authCurrentUser(accessToken);
-      console.log('response in check Naviator', response);
+
       if (!response) {
         // refreshAuthToken();
       } else {

@@ -63,7 +63,7 @@ export const authCurrentUser = async (accessToken: string): Promise<any> => {
       },
       credentials: 'include',
     });
-    console.log('response', response);
+    // console.log('response', response);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -75,12 +75,9 @@ export const authCurrentUser = async (accessToken: string): Promise<any> => {
     }
 
     const data = await response.json();
-    console.log('data', data);
 
     return data;
   } catch (error: any) {
-    // console.error('Error:', error);
-
     throw error;
   }
 };
