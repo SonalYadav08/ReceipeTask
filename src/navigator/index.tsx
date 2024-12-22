@@ -20,7 +20,9 @@ const StackNavigator = () => {
       let accessToken: any = await AsyncStorage.getItem('access_token');
 
       let response = await authCurrentUser(accessToken);
-      // console.log('auht check re', response);
+      if (!response) {
+        refreshAuthToken();
+      }
     } catch (error: any) {
       refreshAuthToken();
       // console.log('error', error);
@@ -31,7 +33,7 @@ const StackNavigator = () => {
   const refreshAuthToken = async () => {
     try {
       let refresh_token: any = await AsyncStorage.getItem('refresh_token');
-      // console.log(refresh_token);
+
       let response = await refreshToken(refresh_token);
       await AsyncStorage.setItem('access_token', response.accessToken);
       await AsyncStorage.setItem('refresh_token', response.refreshToken);
@@ -62,7 +64,6 @@ const StackNavigator = () => {
     setInitialRouteName();
   }, []);
 
-  // Delay rendering of the navigator until `initialRoute` is set
   if (!initialRoute) {
     return (
       <View style={styles.loaderContainer}>

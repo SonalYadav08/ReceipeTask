@@ -4,9 +4,7 @@
 
 import React, {useContext} from 'react';
 import StackNavigator from './src/navigator';
-import {ThemeContext, ThemeProvider} from './src/context/ThemeContext';
-import {Provider} from 'react-redux';
-import store from './src/redux/store';
+import {ThemeProvider} from './src/context/ThemeContext';
 
 const App = () => {
   return (

@@ -24,11 +24,11 @@ const HomeScreen = () => {
     setSearchQuery(text);
 
     if (text.trim()) {
-      let data = await searchRecipes(text); // Call API when search query changes
+      let data = await searchRecipes(text);
       console.log('data==>', data);
-      setRecipeList(data?.recipes); // Update the list with the search results
+      setRecipeList(data?.recipes);
     } else {
-      getReceipe(); // Fetch all recipes if search query is empty
+      getReceipe();
     }
   };
 
@@ -77,7 +77,7 @@ const HomeScreen = () => {
         <FlatList
           initialNumToRender={4}
           data={recipeList}
-          keyExtractor={item => item.id}
+          keyExtractor={(item: any) => item.id}
           renderItem={renderItem}
           ListEmptyComponent={
             <Text
