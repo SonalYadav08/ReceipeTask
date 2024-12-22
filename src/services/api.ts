@@ -43,7 +43,6 @@ export const loginUser = async (
 export const getRecipes = async (): Promise<any> => {
   try {
     const response: AxiosResponse<any> = await axios.get(`${baseURL}/recipes`);
-    console.log(response.data);
 
     return response.data;
   } catch (error: any) {
@@ -56,16 +55,15 @@ export const getRecipes = async (): Promise<any> => {
 };
 
 export const authCurrentUser = async (accessToken: string): Promise<any> => {
-  console.log('access token in API:', accessToken);
-
   try {
     const response = await fetch(`${baseURL}/auth/me`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${accessToken}`, // Pass JWT via Authorization header
+        Authorization: `Bearer ${accessToken}`,
       },
-      credentials: 'include', // Include cookies in the request
+      credentials: 'include',
     });
+    console.log('response', response);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -77,11 +75,11 @@ export const authCurrentUser = async (accessToken: string): Promise<any> => {
     }
 
     const data = await response.json();
-    console.log(data);
+    console.log('data', data);
 
     return data;
   } catch (error: any) {
-    console.error('Error:', error);
+    // console.error('Error:', error);
 
     throw error;
   }
@@ -103,8 +101,6 @@ export const refreshToken = async (refreshToken: string): Promise<any> => {
       },
     );
 
-    console.log(response.data);
-
     return response.data;
   } catch (error: any) {
     console.error('Error refreshing token:', error);
@@ -119,13 +115,10 @@ export const refreshToken = async (refreshToken: string): Promise<any> => {
 //Search Functionality
 
 export const searchRecipes = async (query: string): Promise<any> => {
-  console.log('query', query);
-
   try {
     const response: AxiosResponse<any> = await axios.get(
       `${baseURL}/recipes/search?q=${query}`,
     );
-    console.log(response.data);
 
     return response.data;
   } catch (error: any) {

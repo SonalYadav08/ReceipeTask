@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
     if (text.trim()) {
       let data = await searchRecipes(text);
-      console.log('data==>', data);
+
       setRecipeList(data?.recipes);
     } else {
       getReceipe();
@@ -67,8 +67,12 @@ const HomeScreen = () => {
       </Text>
       <View style={styles.searchBarContainer}>
         <TextInput
-          style={styles.searchBar}
+          style={[
+            styles.searchBar,
+            {color: theme.textColor, backgroundColor: theme.cardColor},
+          ]}
           placeholder="Search recipes"
+          placeholderTextColor={theme?.textColor}
           value={searchQuery}
           onChangeText={handleSearch} // Trigger search on every text change
         />
@@ -80,13 +84,7 @@ const HomeScreen = () => {
           keyExtractor={(item: any) => item.id}
           renderItem={renderItem}
           ListEmptyComponent={
-            <Text
-              style={{
-                alignItems: 'center',
-                color: theme.textColor,
-                alignSelf: 'center',
-                textAlign: 'center',
-              }}>
+            <Text style={[styles.emptyList, {color: theme.textColor}]}>
               No items available
             </Text>
           }

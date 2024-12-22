@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#f9f9f9',
   },
+  emptyList: {
+    alignItems: 'center',
+
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
 });
 
 export default styles;

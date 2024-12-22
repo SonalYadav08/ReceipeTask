@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screens/Login';
-import HomeScreen from '../screens/Home';
 import {NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActivityIndicator, View, StyleSheet, ToastAndroid} from 'react-native';
@@ -10,7 +9,7 @@ import BottomTabNavigator from './tabnavigator';
 
 const Stack = createStackNavigator();
 
-const StackNavigator = () => {
+const StackNavigator = ({navigation}: any) => {
   const [initialRoute, setInitialRoute] = useState<string | undefined>(
     undefined,
   );
@@ -18,41 +17,57 @@ const StackNavigator = () => {
   const checkAuth = async () => {
     try {
       let accessToken: any = await AsyncStorage.getItem('access_token');
-
+      console.log('accessToken', accessToken);
+      if (!accessToken) {
+        navigation.replace('Login');
+      }
       let response = await authCurrentUser(accessToken);
+      console.log('response in check Naviator', response);
       if (!response) {
-        refreshAuthToken();
+        // refreshAuthToken();
+      } else {
+        console.log('Token not yet expired');
+        setInitialRoute('Bottom');
       }
     } catch (error: any) {
-      refreshAuthToken();
-      // console.log('error', error);
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      console.log('error', error);
+      if (error.message === 'Token Expired!') {
+        refreshAuthToken();
+        ToastAndroid.show(
+          `${error.message} Refreshing it...`,
+          ToastAndroid.SHORT,
+        );
+      } else {
+        setInitialRoute('Login');
+      }
     }
   };
 
   const refreshAuthToken = async () => {
     try {
+      setInitialRoute('Bottom');
       let refresh_token: any = await AsyncStorage.getItem('refresh_token');
 
       let response = await refreshToken(refresh_token);
-      await AsyncStorage.setItem('access_token', response.accessToken);
-      await AsyncStorage.setItem('refresh_token', response.refreshToken);
+      if (response) {
+        await AsyncStorage.setItem('access_token', response.accessToken);
+        await AsyncStorage.setItem('refresh_token', response.refreshToken);
+      }
     } catch (error: any) {
       console.log('error', error);
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
   useEffect(() => {
-    checkAuth();
+    // checkAuth();
 
     const setInitialRouteName = async () => {
       try {
-        let userData: any = await AsyncStorage.getItem('access_token');
-        console.log('userData:', userData);
+        let access_token: any = await AsyncStorage.getItem('access_token');
 
-        if (userData) {
-          setInitialRoute('Bottom');
-        } else {
+        if (access_token) {
+          checkAuth();
+        } else if (!access_token || access_token === null) {
           setInitialRoute('Login');
         }
       } catch (error) {
